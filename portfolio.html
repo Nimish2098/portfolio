@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nimish Rao — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f; --surface: #111118; --card: #16161f;
+    --border: rgba(255,255,255,0.07); --accent: #c8f564; --accent2: #7c6aff;
+    --text: #f0eee8; --muted: #A1A1AA;
+    --text-primary: #FFFFFF; --text-secondary: #A1A1AA;
+    --ff-display: 'Inter', sans-serif; --ff-mono: 'DM Mono', monospace;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--ff-display); overflow-x: hidden; }
+  .cursor { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s; mix-blend-mode: difference; }
+  .cursor-ring { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--accent); position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0.5; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: rgba(10,10,15,0.8); backdrop-filter: blur(20px); border-bottom: 0.5px solid var(--border); }
+  .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-family: var(--ff-mono); letter-spacing: 1px; transition: color .2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 3rem 0; position: relative; overflow: hidden; }
+  .hero-bg-text { position: absolute; font-size: clamp(120px,18vw,240px); font-weight: 800; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.04); top: 50%; left: -2%; transform: translateY(-50%); white-space: nowrap; user-select: none; letter-spacing: -8px; }
+  .hero-tag { font-family: var(--ff-mono); font-size: 12px; color: var(--accent); letter-spacing: 3px; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp .6s .3s forwards; }
+  .hero h1 { font-size: clamp(48px,7vw,96px); font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; max-width: 800px; color: var(--text-primary); opacity: 0; animation: fadeUp .6s .5s forwards; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero-desc { max-width: 480px; font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-top: 2rem; opacity: 0; animation: fadeUp .6s .7s forwards; font-family: var(--ff-display); font-weight: 450; }
+  .hero-actions { display: flex; gap: 1rem; margin-top: 2.5rem; opacity: 0; animation: fadeUp .6s .9s forwards; }
+  .btn-primary { background: var(--accent); color: #0a0a0f; padding: .75rem 2rem; border: none; border-radius: 4px; font-family: var(--ff-display); font-size: 14px; font-weight: 700; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,245,100,0.3); }
+  .btn-ghost { background: transparent; color: var(--text); padding: .75rem 2rem; border: 0.5px solid rgba(255,255,255,0.2); border-radius: 4px; font-family: var(--ff-display); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .scroll-indicator { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: .75rem; font-family: var(--ff-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; opacity: 0; animation: fadeUp .6s 1.2s forwards; padding-right: 3rem; padding-bottom: 1.5rem; }
+  .scroll-line { width: 40px; height: 1px; background: var(--muted); position: relative; overflow: hidden; }
+  .scroll-line::after { content: ''; position: absolute; height: 100%; width: 50%; background: var(--accent); animation: scanline 1.5s infinite; }
+  .stats-strip { display: flex; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+  .stat { flex: 1; padding: 2rem; border-right: 0.5px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-size: 42px; font-weight: 800; letter-spacing: -2px; }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-family: var(--ff-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-top: 4px; }
+  .section-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 3rem; }
+  .section-num { font-family: var(--ff-mono); font-size: 12px; color: var(--accent); letter-spacing: 0.15em; }
+  .section-title { font-size: 36px; font-weight: 900; letter-spacing: -0.04em; color: var(--text-primary); }
+  .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5px; background: var(--border); border: 0.5px solid var(--border); }
+  .work-card { background: var(--card); padding: 2.5rem; cursor: pointer; transition: background .25s; position: relative; overflow: hidden; }
+  .work-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200,245,100,0.05) 0%, transparent 60%); opacity: 0; transition: opacity .3s; }
+  .work-card:hover { background: #1c1c28; }
+  .work-card:hover::before { opacity: 1; }
+  .work-card-tag { font-family: var(--ff-mono); font-size: 10px; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+  .work-card h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: .75rem; }
+  .work-card p { font-size: 13px; color: var(--muted); line-height: 1.6; font-family: var(--ff-display); font-weight: 400; }
+  .work-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; }
+  .tech-pills { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .pill { font-family: var(--ff-mono); font-size: 10px; padding: 4px 10px; border: 0.5px solid var(--border); border-radius: 20px; color: var(--muted); letter-spacing: 0.1em; }
+  .arrow-btn { width: 36px; height: 36px; border: 0.5px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s; flex-shrink: 0; }
+  .work-card:hover .arrow-btn { background: var(--accent); border-color: var(--accent); }
+  .arrow-btn svg { width: 14px; height: 14px; stroke: var(--muted); }
+  .work-card:hover .arrow-btn svg { stroke: #0a0a0f; }
+  .skills-section { background: var(--surface); }
+  .skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .skill-group { background: var(--card); padding: 2rem; }
+  .skill-group-title { font-size: 11px; font-family: var(--ff-mono); color: var(--accent); letter-spacing: 0.2em; margin-bottom: 1.5rem; }
+  .skill-item { display: flex; align-items: center; justify-content: space-between; padding: .6rem 0; border-bottom: 0.5px solid var(--border); }
+  .skill-item:last-child { border-bottom: none; }
+  .skill-name { font-size: 14px; font-weight: 600; }
+  .skill-bar-wrap { width: 80px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .skill-bar { height: 100%; background: var(--accent); border-radius: 2px; width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .about-img-box { width: 100%; aspect-ratio: 3/4; background: var(--card); border: 0.5px solid var(--border); border-radius: 2px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .about-initials { font-size: 80px; font-weight: 800; color: rgba(200,245,100,0.12); letter-spacing: -4px; }
+  .about-badge { position: absolute; bottom: -16px; right: -16px; background: var(--accent); color: #0a0a0f; padding: 1rem 1.5rem; font-size: 12px; font-weight: 700; letter-spacing: 1px; font-family: var(--ff-mono); }
+  .about-text h2 { font-size: 36px; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1.5rem; color: var(--text-primary); }
+  .about-text p { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 1rem; font-family: var(--ff-display); font-weight: 400; }
+  .about-links { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .link-chip { display: flex; align-items: center; gap: .5rem; padding: .6rem 1.25rem; border: 0.5px solid var(--border); border-radius: 2px; text-decoration: none; color: var(--text); font-size: 13px; font-family: var(--ff-mono); letter-spacing: 0.1em; transition: border-color .2s, color .2s; }
+  .link-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .contact-wrap { text-align: center; padding: 8rem 3rem; background: var(--surface); }
+  .contact-wrap h2 { font-size: clamp(36px,6vw,72px); font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 2rem; color: var(--text-primary); }
+  .contact-wrap h2 em { font-style: normal; -webkit-text-stroke: 1px var(--text); color: transparent; }
+  .contact-email { font-family: var(--ff-mono); font-size: 18px; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; transition: opacity .2s; }
+  .contact-email:hover { opacity: .7; }
+  footer { padding: 2rem 3rem; border-top: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-family: var(--ff-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+  .marquee-wrap { overflow: hidden; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); padding: 1rem 0; }
+  .marquee { display: flex; gap: 3rem; animation: marquee 20s linear infinite; white-space: nowrap; }
+  .marquee-item { font-family: var(--ff-mono); font-size: 12px; color: var(--muted); letter-spacing: 0.1em; }
+  .marquee-dot { color: var(--accent); }
+  section { padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scanline { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+  .reveal.visible { opacity: 1; transform: none; }
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; } .nav-links { gap: 1rem; }
+    .hero { padding: 100px 1.5rem 0; } section { padding: 4rem 1.5rem; }
+    .work-grid { grid-template-columns: 1fr; } .skills-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; } .stats-strip { flex-wrap: wrap; }
+    .stat { flex: 1 1 50%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav>
+  <div class="logo">Nimish<span>.</span>Rao</div>
+  <ul class="nav-links">
+    <li><a href="#work">work</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#about">about</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-bg-text">ENGINEER</div>
+  <div class="hero-tag">— JAVA BACKEND DEVELOPER • AVAILABLE 2026</div>
+
+  <h1>Backend<br><em>Engineer</em><br>& AI Enthusiast.</h1>
+
+  <p class="hero-desc">
+    I build scalable backend systems and REST APIs using Java and Spring Boot.
+    Passionate about clean architecture, high-performance services, and applying
+    machine learning to solve real-world problems.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})">
+      View Projects
+    </button>
+
+    <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+      Contact Me
+    </button>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    scroll to explore
+  </div>
+</div>
+
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span class="marquee-item">JAVA <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">PYTHON <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">SQL <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">SPRING BOOT <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">SPRING MVC <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">SPRING JPA <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">HIBERNATE <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">REST APIs <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">MICROSERVICES <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">POSTGRESQL <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">MYSQL <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">REDIS <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">DOCKER <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">GIT <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">MAVEN <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">DATA STRUCTURES <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+<section id="work">
+  <div class="section-header reveal">
+    <span class="section-num">01 /</span>
+    <h2 class="section-title">Projects</h2>
+  </div>
+
+  <div class="work-grid reveal">
+
+    <div class="work-card">
+      <div class="work-card-tag">AI / NLP — 2025</div>
+      <h3>DocApproval</h3>
+      <p>Backend system that analyzes documents and resumes against requirements using NLP to compute match scores and automate approval workflows.</p>
+
+      <div class="work-card-footer">
+        <div class="tech-pills">
+          <span class="pill">Java</span>
+          <span class="pill">Spring Boot</span>
+          <span class="pill">PostgreSQL</span>
+          <span class="pill">NLP</span>
+        </div>
+
+        <a href="https://github.com/Nimish2098/DocApproval" target="_blank" class="arrow-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12,5 19,12 12,19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-tag">FINTECH — 2025</div>
+      <h3>Finance Tracker</h3>
+      <p>Personal finance backend system with JWT authentication, budget tracking, and optimized queries capable of handling thousands of transaction records.</p>
+
+      <div class="work-card-footer">
+        <div class="tech-pills">
+          <span class="pill">Java</span>
+          <span class="pill">Spring Boot</span>
+          <span class="pill">Spring Security</span>
+          <span class="pill">PostgreSQL</span>
+        </div>
+
+        <a href="https://github.com/Nimish2098/Finance-Tracker" target="_blank" class="arrow-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12,5 19,12 12,19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-tag">SYSTEM DESIGN — 2024</div>
+      <h3>Scalable URL Shortener</h3>
+      <p>Distributed URL shortening service with Redis caching and optimized database indexing to reduce latency and support high traffic loads.</p>
+
+      <div class="work-card-footer">
+        <div class="tech-pills">
+          <span class="pill">Java</span>
+          <span class="pill">Spring Boot</span>
+          <span class="pill">MySQL</span>
+          <span class="pill">Redis</span>
+        </div>
+
+        <a href="https://github.com/Nimish2098/Scalable-URL-Shortener" target="_blank" class="arrow-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12,5 19,12 12,19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-tag">FULL STACK — 2025</div>
+      <h3>QuickShop E-Commerce</h3>
+      <p>Full-stack e-commerce platform with product search, cart, checkout, JWT authentication, and an admin dashboard for managing users, orders, and products.</p>
+
+      <div class="work-card-footer">
+        <div class="tech-pills">
+          <span class="pill">Spring Boot</span>
+          <span class="pill">React</span>
+          <span class="pill">JWT</span>
+          <span class="pill">REST API</span>
+        </div>
+
+        <a href="https://github.com/Nimish2098/QuickShop" target="_blank" class="arrow-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12,5 19,12 12,19"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div class="skills-section" id="skills">
+  <section>
+    <div class="section-header reveal">
+      <span class="section-num">02 /</span>
+      <h2 class="section-title">Skills & Tools</h2>
+    </div>
+
+    <div class="skills-grid reveal">
+
+      <div class="skill-group">
+        <div class="skill-group-title">LANGUAGES</div>
+        <div class="skill-item"><span class="skill-name">Java</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="95"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Python</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="80"></div></div></div>
+        <div class="skill-item"><span class="skill-name">SQL</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">BACKEND</div>
+        <div class="skill-item"><span class="skill-name">Spring Boot</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="92"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Spring Security / JWT</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="88"></div></div></div>
+        <div class="skill-item"><span class="skill-name">REST API Development</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="90"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Microservices</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="80"></div></div></div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">DATABASES & TOOLS</div>
+        <div class="skill-item"><span class="skill-name">PostgreSQL</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="88"></div></div></div>
+        <div class="skill-item"><span class="skill-name">MySQL</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Redis</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="75"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Docker / Git / Maven</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="82"></div></div></div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">CS FUNDAMENTALS</div>
+        <div class="skill-item"><span class="skill-name">Data Structures & Algorithms</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="90"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Object-Oriented Programming</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="92"></div></div></div>
+        <div class="skill-item"><span class="skill-name">DBMS</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Operating Systems / Networks</span><div class="skill-bar-wrap"><div class="skill-bar" data-width="78"></div></div></div>
+      </div>
+
+    </div>
+  </section>
+</div>
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">03 /</span>
+    <h2 class="section-title">About Me</h2>
+  </div>
+
+  <div class="about-grid reveal">
+
+    <div style="position:relative;">
+      <div class="about-img-box">
+        <div class="about-initials">NR</div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 40%, rgba(200,245,100,0.08) 0%, transparent 70%);"></div>
+      </div>
+      <div class="about-badge">OPEN TO WORK 2026</div>
+    </div>
+
+    <div class="about-text">
+      <h2>
+        Building scalable<br>
+        <em style="font-style:normal;color:var(--accent)">backend systems</em><br>
+        with clean architecture.
+      </h2>
+
+      <p>
+        I'm Nimish Rao — a Computer Science student specializing in AI & Machine Learning and a backend developer focused on building scalable systems using Java and Spring Boot.
+      </p>
+
+      <p>
+        I enjoy designing clean REST APIs, optimizing database performance, and building reliable backend services. My projects include systems like a scalable URL shortener, finance tracker, and NLP-based document approval platform.
+      </p>
+
+      <p>
+        I have solved 300+ DSA problems and regularly practice system design and backend engineering to build production-ready applications.
+      </p>
+
+      <div class="about-links">
+        <a class="link-chip" href="https://github.com/Nimish2098" target="_blank">↗ GitHub</a>
+        <a class="link-chip" href="https://linkedin.com/in/nimishraoworks" target="_blank">↗ LinkedIn</a>
+        <a class="link-chip" href="#" target="_blank">↗ Résumé</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="contact-wrap" id="contact">
+  <p style="font-family:var(--ff-mono);font-size:11px;color:var(--muted);letter-spacing:3px;margin-bottom:1.5rem;">04 / CONTACT</p>
+  <h2>Let's build<br>something <em>great.</em></h2>
+  <p style="font-family:var(--ff-mono);font-size:14px;color:var(--muted);margin:1.5rem auto 2.5rem;max-width:400px;line-height:1.8;">Have a project in mind or want to discuss backend solutions? Feel free to reach out!</p>
+  <a class="contact-email" href="mailto:raonimish25@gmail.com">raonimish25@gmail.com</a>
+</div>
+
+<footer>
+  <span class="footer-copy">© 2026 — Nimish Rao. All rights reserved.</span>
+  <span class="footer-copy">Built with caffeine, bugs, and determination ☕</span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function lerpCursor(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lerpCursor);}
+  lerpCursor();
+  document.querySelectorAll('button,a,.work-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='50px';ring.style.height='50px';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='14px';cursor.style.height='14px';ring.style.width='36px';ring.style.height='36px';});
+  });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  const skillObserver=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.skill-bar').forEach(b=>{b.style.width=b.dataset.width+'%';});});},{threshold:0.3});
+  document.querySelectorAll('.skills-grid').forEach(el=>skillObserver.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const id=a.getAttribute('href').slice(1);const el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}});});
+</script>
+</body>
+</html>
