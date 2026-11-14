@@ -11,7 +11,7 @@ Live Site: [nimish2098.github.io/Portfolio](https://nimish2098.github.io/Portfol
 
 ## 📌 Featured Highlights
 
-* **Projects Section:** Showcases backend & full-stack applications (DocApproval, Finance Tracker, Scalable URL Shortener, QuickShop E-Commerce).
+* **Projects Section:** Showcases backend & full-stack applications (Uptime Monitor, DocApproval, Finance Tracker, Scalable URL Shortener, QuickShop E-Commerce).
 * **Skills Overview:** Categorized breakdown of programming languages, backend frameworks, databases, and core CS fundamentals.
 * **About & Contact:** Background, experience highlights, social links (GitHub, LinkedIn, Résumé), and direct email contact.
 
