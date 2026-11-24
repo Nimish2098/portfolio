@@ -19,4 +19,4 @@ Live Site: [nimish2098.github.io/Portfolio](https://nimish2098.github.io/Portfol
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/nimish2098/Portfolio.git](https://github.com/nimish2098/Portfolio.git)
+   git clone [https://github.com/nimish2098/Portfolio.git](https://github.com/nimish2098/portfolio.git)
