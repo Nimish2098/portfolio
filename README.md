@@ -2,7 +2,7 @@
 
 A clean, modern, and responsive developer portfolio showcasing my work as a Java Backend Engineer and AI Enthusiast.
 
-Live Site: [nimish2098.github.io/Portfolio](https://nimish2098.github.io/Portfolio/portfolio.html)
+Live Site: [nimish2098.github.io/portfolio](https://nimish2098.github.io/portfolio/portfolio.html)
 
 ## 🚀 Built With
 
@@ -19,4 +19,4 @@ Live Site: [nimish2098.github.io/Portfolio](https://nimish2098.github.io/Portfol
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/nimish2098/Portfolio.git](https://github.com/nimish2098/portfolio.git)
+   git clone [https://github.com/nimish2098/portfolio.git](https://github.com/nimish2098/portfolio.git)
